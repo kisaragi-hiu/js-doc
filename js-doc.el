@@ -1,4 +1,4 @@
-;;; js-doc.el --- Insert JsDoc style comment easily
+;;; js-doc.el --- Insert JsDoc style comment easily  -*- lexical-binding: t; -*-
 
 ;; Author: mooz <stillpedant@gmail.com>
 ;; Version: 0.0.5
@@ -38,9 +38,9 @@
 ;;       js-doc-license "license name")
 ;;
 ;; (add-hook 'js2-mode-hook
-;;           #'(lambda ()
-;;               (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
-;;               (define-key js2-mode-map "@" 'js-doc-insert-tag)))
+;;           (lambda ()
+;;             (define-key js2-mode-map "\C-ci" 'js-doc-insert-function-doc)
+;;             (define-key js2-mode-map "@" 'js-doc-insert-tag)))
 ;;
 ;; If you want to see the tag description, just input the next command
 ;;   M-x js-doc-describe-tag
@@ -156,8 +156,7 @@
     ("variation" . "Helps distinguish between different symbols with the same longname. Syntax: @variation <variationNumber>")
     ("version" . "Documents the version of an item. The text following the @version tag will be used to denote the version of the item. Syntax: @version <version>")
     ("virtual" . "Synonym for @abstract."))
-  "JsDoc tag list
-This list contains tag name and its description")
+  "An alist of tags and their descriptions.")
 
 (defvar js-doc-file-doc-lines
   '(js-doc-top-line
@@ -461,9 +460,9 @@ The comment style can be custimized via `customize-group js-doc'"
   (interactive)
   (let ((tag (completing-read "Tag: " (js-doc-make-tag-list)
                               nil t (thing-at-point 'word) nil nil))
-        (temp-buffer-show-hook #'(lambda ()
-                                   (fill-region 0 (buffer-size))
-                                   (fit-window-to-buffer))))
+        (temp-buffer-show-hook (lambda ()
+                                 (fill-region 0 (buffer-size))
+                                 (fit-window-to-buffer))))
     (unless (string-equal tag "")
       (with-output-to-temp-buffer "JsDocTagDescription"
         (princ (format "@%s\n\n%s"
